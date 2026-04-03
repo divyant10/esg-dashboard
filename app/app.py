@@ -10,7 +10,7 @@ import os
 st.set_page_config(page_title="ESG Dashboard", layout="wide")
 
 # -------------------------------
-# 🎨 CUSTOM CSS (🔥 GAME CHANGER)
+# 🎨 CUSTOM CSS
 # -------------------------------
 st.markdown("""
 <style>
@@ -49,12 +49,12 @@ infosys_logo = Image.open(infosys_logo_path)
 reliance_logo = Image.open(reliance_logo_path)
 
 # -------------------------------
-# 🎯 HEADER (UPGRADED)
+# 🎯 HEADER
 # -------------------------------
 st.markdown("# 🌍 ESG Analytics Dashboard")
-st.markdown("### 🔍 Infosys vs Reliance — Business Insights")
+st.caption("A comparative analysis of sustainability metrics across industries")
 
-col1, col2 = st.columns([1,1])
+col1, col2 = st.columns(2)
 with col1:
     st.image(infosys_logo, width=140)
 with col2:
@@ -63,67 +63,82 @@ with col2:
 st.markdown("---")
 
 # -------------------------------
-# 📊 KPI CARDS (TOP SECTION 🔥)
+# 📥 DOWNLOAD BUTTON (🔥)
+# -------------------------------
+st.download_button(
+    label="📥 Download Dataset",
+    data=df.to_csv(index=False),
+    file_name="esg_data.csv",
+    mime="text/csv"
+)
+
+# -------------------------------
+# 📈 KPI SECTION
 # -------------------------------
 st.markdown("## 📈 Key Metrics Comparison")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric("👩 Infosys Female %", f"{df.iloc[0]['Female_Percentage']}%")
-    st.metric("👩 Reliance Female %", f"{df.iloc[1]['Female_Percentage']}%")
+    st.metric("Infosys Female %", f"{df.iloc[0]['Female_Percentage']}%")
+    st.metric("Reliance Female %", f"{df.iloc[1]['Female_Percentage']}%")
 
 with col2:
-    st.metric("🔁 Infosys Attrition", f"{df.iloc[0]['Attrition_Total']}%")
-    st.metric("🔁 Reliance Attrition", f"{df.iloc[1]['Attrition_Total']}%")
+    st.metric("Infosys Attrition", f"{df.iloc[0]['Attrition_Total']}%")
+    st.metric("Reliance Attrition", f"{df.iloc[1]['Attrition_Total']}%")
 
 with col3:
-    st.metric("🏢 Infosys Board %", f"{df.iloc[0]['Board_Female_Percentage']}%")
-    st.metric("🏢 Reliance Board %", f"{df.iloc[1]['Board_Female_Percentage']}%")
+    st.metric("Infosys Board %", f"{df.iloc[0]['Board_Female_Percentage']}%")
+    st.metric("Reliance Board %", f"{df.iloc[1]['Board_Female_Percentage']}%")
 
 st.markdown("---")
 
 # -------------------------------
-# 📊 CHARTS (CLEAN + COLOR)
+# 🎯 FILTER MODE (🔥 INTERACTIVE)
+# -------------------------------
+st.markdown("## 🎛️ Interactive Comparison")
+
+metric = st.selectbox(
+    "Select Metric to Compare",
+    ["Female_Percentage", "Attrition_Total", "Board_Female_Percentage"]
+)
+
+fig, ax = plt.subplots()
+ax.bar(df["Company"], df[metric])
+ax.set_ylabel(metric)
+st.pyplot(fig)
+
+st.markdown("---")
+
+# -------------------------------
+# 📊 STATIC CHARTS
 # -------------------------------
 st.markdown("## 📊 ESG Comparison")
 
 col1, col2, col3 = st.columns(3)
 
-# Gender
 with col1:
     st.markdown("### 👩 Gender Diversity")
     fig1, ax1 = plt.subplots()
     ax1.bar(df["Company"], df["Female_Percentage"])
-    ax1.set_title("Female %")
     st.pyplot(fig1)
 
-# Attrition
 with col2:
-    st.markdown("### 🔁 Attrition Rate")
+    st.markdown("### 🔁 Attrition")
     fig2, ax2 = plt.subplots()
     ax2.bar(df["Company"], df["Attrition_Total"])
-    ax2.set_title("Attrition %")
     st.pyplot(fig2)
 
-# Governance
 with col3:
     st.markdown("### 🏢 Governance")
     fig3, ax3 = plt.subplots()
     ax3.bar(df["Company"], df["Board_Female_Percentage"])
-    ax3.set_title("Board Diversity %")
     st.pyplot(fig3)
 
 st.markdown("---")
 
 # -------------------------------
-# 📁 DATA TABLE (CLEAN)
-# -------------------------------
-with st.expander("📂 View Raw Dataset"):
-    st.dataframe(df, use_container_width=True)
-
-# -------------------------------
-# 🧠 INSIGHTS (CARD STYLE)
+# 🧠 INSIGHTS
 # -------------------------------
 st.markdown("## 🧠 Key Insights")
 
@@ -136,22 +151,41 @@ st.success("Climate risk is common across industries.")
 st.markdown("---")
 
 # -------------------------------
-# 🌟 SIDEBAR (CLEAN)
+# 🏆 COMPARISON WINNER (🔥)
 # -------------------------------
-st.sidebar.title("📌 About")
+st.markdown("## 🏆 Who Performs Better?")
+
+if df.iloc[0]['Female_Percentage'] > df.iloc[1]['Female_Percentage']:
+    st.success("Infosys leads in workforce diversity.")
+
+if df.iloc[0]['Attrition_Total'] > df.iloc[1]['Attrition_Total']:
+    st.warning("Reliance shows better employee retention.")
+
+st.info("Both companies need improvement in governance diversity.")
+
+st.markdown("---")
+
+# -------------------------------
+# 📂 DATA TABLE
+# -------------------------------
+with st.expander("📂 View Raw Dataset"):
+    st.dataframe(df, use_container_width=True)
+
+# -------------------------------
+# 🌟 SIDEBAR
+# -------------------------------
+st.sidebar.title("📌 About Project")
 
 st.sidebar.markdown("""
-**Project:** ESG Analytics Dashboard  
+**ESG Analytics Dashboard**
 
-**Focus:**
-- Company comparison  
-- ESG metrics  
+- Real company data analysis  
+- Interactive comparison  
 - Business insights  
 
-**Tech Stack:**
+**Tech Stack**
 - Python  
 - Streamlit  
-- Data Analysis  
 """)
 
 # -------------------------------
