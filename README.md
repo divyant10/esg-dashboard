@@ -37,6 +37,16 @@ A professional ESG (Environmental, Social, Governance) analytics dashboard compa
 - Matplotlib  
 
 ---
+
+## ⚙️ Run Locally
+
+```bash
+git clone https://github.com/divyant10/esg-dashboard.git
+cd esg-dashboard
+pip install -r requirements.txt
+streamlit run app/app.py
+
+## 📂 Project Structure
 ESG_Project/
 │
 ├── app/
@@ -52,13 +62,3 @@ ESG_Project/
 ├── requirements.txt
 └── README.md
 ---
-
-## ⚙️ Run Locally
-
-```bash
-git clone https://github.com/divyant10/esg-dashboard.git
-cd esg-dashboard
-pip install -r requirements.txt
-streamlit run app/app.py
-
-## 📂 Project Structure
